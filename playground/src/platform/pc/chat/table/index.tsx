@@ -15,8 +15,22 @@ interface EditableTableProps {
     metadata: Record<string, { type: string }>; // Metadata with property types
 }
 
-// Helper to convert values based on type
+// Helper to convert values based on type, with default values for each type
 const convertToType = (value: any, type: string) => {
+    if (value == null || value === '') {
+        switch (type) {
+            case 'int64':
+            case 'int32':
+                return 0;
+            case 'float64':
+                return 0.0;
+            case 'bool':
+                return false;
+            case 'string':
+            default:
+                return '';
+        }
+    }
     switch (type) {
         case 'int64':
         case 'int32':
@@ -41,10 +55,12 @@ const EditableTable: React.FC<EditableTableProps> = ({ initialData, onUpdate, me
 
     // Update dataSource whenever initialData changes
     useEffect(() => {
-        setDataSource(
-            Object.entries(initialData).map(([key, value]) => ({ key, value }))
-        );
-    }, [initialData]);
+        const dataWithDefaults = Object.entries(metadata).map(([key, { type }]) => ({
+            key,
+            value: initialData[key] != null ? convertToType(initialData[key], type) : convertToType(null, type),
+        }));
+        setDataSource(dataWithDefaults);
+    }, [initialData, metadata]);
 
     // Function to check if the current row is being edited
     const isEditing = (record: DataType) => record.key === editingKey;
