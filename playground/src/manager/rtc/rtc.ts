@@ -200,7 +200,7 @@ export class RtcManager extends AGEventEmitter<RtcEvents> {
 
         if (text.trim().length > 0) {
           this.emit("textChanged", textItem);
-          window.parent.postMessage(textItem, "*");
+
         }
 
 
