@@ -90,18 +90,24 @@ const Chat = () => {
     setInputValue("")
   }
 
+    // Listen for messages from the parent
+    useEffect(() => {
+      const handleMessage = (event) => {
+        console.error("Message received from parent:", event.data);
+      
+        rtcManager.sendText(event.data)
+      };
+  
+      window.addEventListener("message", handleMessage);
+  
+      // Cleanup event listener on component unmount
+      return () => {
+        window.removeEventListener("message", handleMessage);
+      };
+    }, []);
+  
+
   return <section className={styles.chat}>
-    <div className={styles.header}>
-      <span className={styles.left}>
-      </span>
-      <span className={styles.right}>
-        <Select className={styles.graphName}
-          disabled={agentConnected} options={graphs.map((item) => { return { label: item, value: item } })}
-          value={graphName} onChange={onGraphNameChange}></Select>
-        <Button icon={<SettingOutlined />} type="primary" onClick={() => { setModal2Open(true) }}></Button>
-        {isRagGraph(graphName) ? <PdfSelect></PdfSelect> : null}
-      </span>
-    </div>
     <div className={`${styles.content}`} ref={chatRef}>
       {chatItems.map((item, index) => {
         return <ChatItem data={item} key={index} ></ChatItem>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iframe Message Sender</title>
+</head>
+<body>
+  <!-- Embed the iframe -->
+  <iframe id="myIframe" src="http://localhost:3003/"    allow="camera; microphone; autoplay" width="600" height="600"></iframe>
+  
+  <!-- Input box and send button -->
+  <div>
+    <input type="text" id="messageInput" placeholder="Type your message here">
+    <button onclick="sendMessage()">Send Message to Iframe</button>
+  </div>
+  
+  <!-- Display area for received messages -->
+  <div>
+    <h3>Messages from Iframe:</h3>
+    <div id="messageDisplay"></div>
+  </div>
+  
+  <script>
+    const iframe = document.getElementById('myIframe');
+    const messageDisplay = document.getElementById('messageDisplay');
+
+    // Function to send a message to the iframe
+    function sendMessage() {
+      const message = document.getElementById('messageInput').value;
+      iframe.contentWindow.postMessage(message, 'http://localhost:3003');
+    }
+
+    // Listen for messages from the iframe
+    window.addEventListener('message', (event) => {
+      // Check the origin of the message for security
+      if (event.origin !== 'http://localhost:3003') return;
+
+      // Display the message received from the iframe
+      const newMessage = document.createElement('p');
+      newMessage.textContent = `Received: ${event.data}`;
+      messageDisplay.appendChild(newMessage);
+    });
+  </script>
+
+</body>
+</html>
+

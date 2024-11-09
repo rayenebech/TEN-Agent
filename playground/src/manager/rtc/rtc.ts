@@ -50,7 +50,7 @@ export class RtcManager extends AGEventEmitter<RtcEvents> {
 
   async createTracks() {
     try {
-      const videoTrack = await AgoraRTC.createCameraVideoTrack()
+      const videoTrack = undefined;// await AgoraRTC.createCameraVideoTrack()
       this.localTracks.videoTrack = videoTrack
     } catch (err) {
       console.error("Failed to create video track", err)
