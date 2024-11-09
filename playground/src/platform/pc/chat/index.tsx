@@ -95,7 +95,8 @@ const Chat = () => {
       const handleMessage = (event) => {
         console.error("Message received from parent:", event.data);
       
-        rtcManager.sendText(event.data)
+        rtcManager.sendText(event.data);
+      
       };
   
       window.addEventListener("message", handleMessage);

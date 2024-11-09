@@ -7,7 +7,7 @@
 </head>
 <body>
   <!-- Embed the iframe -->
-  <iframe id="myIframe" src="http://localhost:3003/"    allow="camera; microphone; autoplay" width="600" height="600"></iframe>
+  <iframe id="myIframe" src="http://localhost:3003/"    allow="camera; microphone; autoplay" width="600" height="180"></iframe>
   
   <!-- Input box and send button -->
   <div>
@@ -33,12 +33,11 @@
 
     // Listen for messages from the iframe
     window.addEventListener('message', (event) => {
-      // Check the origin of the message for security
-      if (event.origin !== 'http://localhost:3003') return;
-
-      // Display the message received from the iframe
       const newMessage = document.createElement('p');
-      newMessage.textContent = `Received: ${event.data}`;
+    
+      if (event.data.isFinal) { 
+     	 newMessage.textContent = `Received: ${event.data.text}`;
+      }
       messageDisplay.appendChild(newMessage);
     });
   </script>

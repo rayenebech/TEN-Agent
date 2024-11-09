@@ -86,7 +86,17 @@ const Rtc = () => {
 
   const onTextChanged = (text: ITextItem) => {
     if (text.dataType == "transcribe") {
-      const isAgent = Number(text.uid) != Number(userId)
+      const isAgent = Number(text.uid) != Number(userId);
+      console.error("text.isFinal",text.isFinal);
+      if ( text.isFinal) {
+      window.parent.postMessage({
+        userId: text.uid,
+        text: text.text,
+        type: isAgent ? "agent" : "user",
+        isFinal: text.isFinal,
+        time: text.time
+      }, "*");
+    }
       dispatch(addChatItem({
         userId: text.uid,
         text: text.text,
